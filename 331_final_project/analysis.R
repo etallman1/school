@@ -35,7 +35,9 @@ for(i in 1:nrow(data)){
 }
 
 anova <- lm(score ~ valence * concreteness, data = data) %>%
-  anova()
+  anova() %>%
+  kbl() %>%
+  kable_paper(full_width = F)
 
 demo <- read.csv("demo_and_raw_scores.csv")%>%
   rename("Subject" = "ï..Subject")
@@ -79,6 +81,7 @@ avg_line_plot <- ggplot(data_sep, aes(x = concreteness, y = mean_score, color = 
   ylim(8, 9)
 
 ggsave("avg_line_plot.png", avg_line_plot)
+
 
 # ggplot(cleandata_avg, aes(y = MeanAlpha, x = language, col = language, fill = language)) +
 #   geom_boxplot(alpha = 0.25, position = position_dodge(width = 0.75)) +
