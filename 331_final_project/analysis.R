@@ -16,6 +16,7 @@ library("kableExtra")
 library("webshot")
 library("nlme")
 library("ez")
+library("apaTables")
 
 data <- read.csv("final_data.csv") %>%
   rename("score" = "ï..score") 
@@ -45,7 +46,7 @@ for(i in 1:nrow(data)){
 #   kable_paper(full_width = F)
 # print(anova)
 
-anova <- ezANOVA(data = data, dv = score, wid = subject, within = concreteness * valence) %>%
+anova <- ezANOVA(data = data, dv = score, wid = subject, within = .(concreteness, valence), detailed = F) %>%
   kbl() %>%
   kable_paper(full_width = F)
 print(anova)
@@ -75,7 +76,7 @@ avg_bar_plot <- ggplot(data_means, aes(x = category, y = mean_score, fill = cate
   labs(x = "Word Category", y = "Mean Recall", fill = "Word Categories", title = "Mean Recall for Each Word Category") +
   theme_hc() +
   theme(axis.title.x = element_blank())
-
+avg_bar_plot
 
 ggsave("avg_barplot.png", avg_bar_plot)
 
@@ -94,10 +95,10 @@ avg_line_plot <- ggplot(data_sep, aes(x = concreteness, y = mean_score, color = 
 
 ggsave("avg_line_plot.png", avg_line_plot)
 
-means_table <- data_means %>%
-  kbl() %>%
-  kable_paper(full_width = T)
-print(means_table)
-
+means_table <- apa.2way.table(iv1 = valence,iv2 = concreteness, dv = score, 
+                              data = data, 
+                              filename = "desc.doc", 
+                              show.marginal.means = F,
+                              table.number = 1)
   
   
