@@ -12,6 +12,10 @@ library("viridis")
 library("plotly")
 library("knitr")
 library("readr")
+library("kableExtra")
+library("webshot")
+library("nlme")
+library("ez")
 
 data <- read.csv("final_data.csv") %>%
   rename("score" = "ï..score") 
@@ -34,10 +38,18 @@ for(i in 1:nrow(data)){
   }
 }
 
-anova <- lm(score ~ valence * concreteness, data = data) %>%
-  anova() %>%
+# anova <- lm(score ~ valence * concreteness, data = data) %>%
+#   anova() %>%
+#   rename("p value" = "Pr(>F)") %>%
+#   kbl() %>%
+#   kable_paper(full_width = F)
+# print(anova)
+
+anova <- ezANOVA(data = data, dv = score, wid = subject, within = concreteness * valence) %>%
   kbl() %>%
   kable_paper(full_width = F)
+print(anova)
+
 
 demo <- read.csv("demo_and_raw_scores.csv")%>%
   rename("Subject" = "ï..Subject")
@@ -83,17 +95,5 @@ avg_line_plot <- ggplot(data_sep, aes(x = concreteness, y = mean_score, color = 
 ggsave("avg_line_plot.png", avg_line_plot)
 
 
-# ggplot(cleandata_avg, aes(y = MeanAlpha, x = language, col = language, fill = language)) +
-#   geom_boxplot(alpha = 0.25, position = position_dodge(width = 0.75)) +
-#   geom_point(size = 1.5, position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.75)) +
-#   xlab("Lesson") +
-#   ylab("SoF") +
-#   ggtitle("Speed of Forgetting by Language") +
-#   labs(col = "language", fill = "language") +
-#   theme_hc() +
-#   
-#   
-#   
-  
   
   
