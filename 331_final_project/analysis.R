@@ -94,6 +94,10 @@ avg_line_plot <- ggplot(data_sep, aes(x = concreteness, y = mean_score, color = 
 
 ggsave("avg_line_plot.png", avg_line_plot)
 
+means_table <- data_means %>%
+  kbl() %>%
+  kable_paper(full_width = T)
+print(means_table)
 
   
   
